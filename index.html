@@ -18,30 +18,25 @@
         <h1>Weather Dashboard</h1>
     </header>
     <div class="container-fluid">
-        <div class="row align-items-start">
+        <div class="row align-items-start" id="search-area">
             <div class="col-md-4">
-                <h3>Search for a City:</h3>
-                <textarea name="Search for a city" id="city" cols="30"></textarea>
-                <button id=btn class="btn btn-primary " type="button">Start</button>
+                <div id="search-city">
+                    <div class="mb-3">
+                    <label  class="form-label"><h3>Search for a City:</h3></label>
+                    <input type="text" class="form-control" id="city-search">
+                    </div>
+                    <button id=btn class="list-group-item list-group-item-action active btn1 text-center" type="button">Start</button>
+                </div>
+                
                 <div>
-                    <div class="list-group top-space">
-                        <button type="button" class="list-group-item list-group-item-action active btn1"
-                            aria-current="true">
-                            The current button
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action btn1">A second button
-                            item</button>
-                        <button type="button" class="list-group-item list-group-item-action btn1">A third button
-                            item</button>
-                        <button type="button" class="list-group-item list-group-item-action btn1">A fourth button
-                            item</button>
-                        <button type="button" class="list-group-item list-group-item-action btn1">A disabled button
-                            item</button>
+                    <div class="list-group top-space" id="search-history">
+
                     </div>
                 </div>
             </div>
+            <!-- Current City -->
             <div class="col-md-8 search-resuts">
-                <h3 id="city">City</h3>
+                <h3 id="daCity">City</h3>
                 <div>
                     <h6 id="temp">Temp:</h6>
                 </div>
@@ -52,7 +47,7 @@
                     <h6 id="humidity">Humidity:</h6>
                 </div>            
                 
-                <div class="col-">
+                <div class="col-6">
                     <h3 class="pictures">5-Day Forcast</h3>
                 </div>
                 <div class="row" id="forecast-container">
@@ -80,6 +75,7 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
         </script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
 </body>
 
