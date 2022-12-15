@@ -13,7 +13,7 @@ var iconFiveDayEl = $("#icon-5d")
 var tempFiveDayEl = $("#temp-5d")
 var windFiveDayEl = $("#wind-5d")
 var humidityDayEl = $("#humidity-5d")
-
+var weatherURL = "http://openweathermap.org/img/wn/"
 
 // create Dates
 let currentDate =moment().format('M/DD/YYYY')
@@ -62,14 +62,17 @@ function getWeatherData() {
                 var long = data.coord.lon;
                 var windData = data.wind.speed;
                 console.log(data)
+                wind.text("Wind: " + windData + "MPH")
                 var tempData = data.main.temp;
                 console.log(tempData)
+                temp.text("Temp: " + tempData + " F")
                 var humidityData = data.main.humidity;
-                // console.log(humidity);
+                humidity.text("Humidity: " + humidityData + " %")
                 var icon = data.weather[0].icon;
+                
                  
                 var cityWeatherData = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
-                var weatherURL = "http://openweathermap.org/img/wn/"
+                
                 fetch(cityWeatherData).then(function (response) {
                     if (response.ok){
                         response.json().then(function (data) {
@@ -79,7 +82,7 @@ function getWeatherData() {
                            for (let i = 0; i < 5; i++) {
                             var weatherContainerEl = $(".weatherContainer");
                             var fiveWeatherEl = $('<div>')
-                            fiveWeatherEl.addClass('col five-weather')
+                            fiveWeatherEl.addClass('col-md-2 five-weather')
                             weatherContainerEl.append(fiveWeatherEl)
 
                             var tomorrowsDate =moment().add(i +1, 'days').format('M/DD/YYYY')                            
