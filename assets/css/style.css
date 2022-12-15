@@ -17,3 +17,7 @@
 #humidity{
     margin-bottom: 100px;
 }
+
+ #five-weather{
+    flex-wrap: nowrap;
+ }
