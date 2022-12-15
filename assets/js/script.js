@@ -3,6 +3,7 @@ var citySearch = $("#city-search");
 var searchCont = $("#search-card");
 var searchHistory = $("#search-history");
 var daCity = $("#daCity")
+var iconEl = $('.icon')
 var temp = $("#temp");
 var wind = $("#wind");
 var humidity = $("#humidity");
@@ -15,33 +16,14 @@ var windFiveDayEl = $("#wind-5d")
 var humidityDayEl = $("#humidity-5d")
 var weatherURL = "http://openweathermap.org/img/wn/"
 
-// create Dates
+// create Date
 let currentDate =moment().format('M/DD/YYYY')
-// let cDay = currentDate.getDate();
-// let cMonth = currentDate.getMonth() + 1;
-// let cYear = currentDate.getFullYear();
-// var viewedDate0 = ( cMonth + "/" + (cDay)  + "/" + cYear);
-// var viewedDate1 = ( cMonth + "/" + (cDay + 1)  + "/" + cYear);
-// var viewedDate2 = ( cMonth + "/" + (cDay + 2)  + "/" + cYear);
-// var viewedDate3 = ( cMonth + "/" + (cDay + 3) + "/" + cYear);
-// var viewedDate4 = ( cMonth + "/" + (cDay + 4) + "/" + cYear);
-// var viewedDate5 = ( cMonth + "/" + (cDay + 5) + "/" + cYear);
+
 
 
 console.log(currentDate)
 // view date
 dateEl.text (currentDate);
-
-// view forecast dates
-// day1El.innerText = viewedDate1;
-// day2El.innerText = viewedDate2;
-// day3El.innerText = viewedDate3;
-// day4El.innerText = viewedDate4;
-// day5El.innerText = viewedDate5;
-
-
-
-
 
 // startBtn.addEventListener("click", function(event) {
 //     event.preventDefault();
@@ -68,8 +50,10 @@ function getWeatherData() {
                 temp.text("Temp: " + tempData + " F")
                 var humidityData = data.main.humidity;
                 humidity.text("Humidity: " + humidityData + " %")
-                var icon = data.weather[0].icon;
+                var weatherIcon = data.weather[0].icon;
+                iconEl.attr("src", weatherURL + weatherIcon + ".png")
                 
+
                  
                 var cityWeatherData = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
                 
@@ -94,9 +78,9 @@ function getWeatherData() {
                             
                             
                             var tempEntry = data.list[i * 8].main.temp;
-                            var windEntry = data.list[i * 8].wind.speed
-                            var humidityEntry = data.list[i * 8].main.humidity
-                            var iconEntry = data.list[i * 8].weather[0].icon
+                            var windEntry = data.list[i * 8].wind.speed;
+                            var humidityEntry = data.list[i * 8].main.humidity;
+                            var iconEntry = data.list[i * 8].weather[0].icon;
                             
                             console.log(tomorrowsDate)
                             console.log(tempEntry)
