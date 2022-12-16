@@ -15,7 +15,7 @@ var tempFiveDayEl = $("#temp-5d")
 var windFiveDayEl = $("#wind-5d")
 var humidityDayEl = $("#humidity-5d")
 var weatherURL = "http://openweathermap.org/img/wn/"
-
+var searchHistory = [];
 // create Date
 let currentDate =moment().format('M/DD/YYYY')
 
@@ -31,11 +31,22 @@ dateEl.text (currentDate);
 //     console.log(city);
 //     getWeatherData(city)
 // })
+startBtn.on("click", function(event) {
+    event.preventDefault();
+    var city = citySearch.val();
+     console.log(city)
+    getWeatherData(city);
+    searchHistory.push(city)
+}
 
-var city = "Vacaville"
+);
 
-function getWeatherData() {
+
+function getWeatherData(city) {
     // get Current weather
+    console.log(city);
+    daCity.text(city.toUpperCase());
+    
     var cityCoor = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
     fetch(cityCoor).then(function (response) {
         if (response.ok) {
@@ -168,6 +179,5 @@ function getWeatherData() {
 }
 
 
-getWeatherData() 
 
 
