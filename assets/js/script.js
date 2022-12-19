@@ -15,38 +15,117 @@ var tempFiveDayEl = $("#temp-5d")
 var windFiveDayEl = $("#wind-5d")
 var humidityDayEl = $("#humidity-5d")
 var weatherURL = "http://openweathermap.org/img/wn/"
-var searchHistory = [];
+var form = $(".form")
+
 // create Date
-let currentDate =moment().format('M/DD/YYYY')
+let currentDate = moment().format('M/DD/YYYY')
 
 
 
 console.log(currentDate)
 // view date
-dateEl.text (currentDate);
+dateEl.text(currentDate);
 
-// startBtn.addEventListener("click", function(event) {
+
+
+// startBtn.on("click", function(event) {
 //     event.preventDefault();
-    
-//     console.log(city);
-//     getWeatherData(city)
-// })
-startBtn.on("click", function(event) {
-    event.preventDefault();
-    var city = citySearch.val();
-     console.log(city)
-    getWeatherData(city);
-    searchHistory.push(city)
-}
+//     var city = citySearch.val();
+//     console.log(city)
+//     getWeatherData(city);
+//     var historyText = city.value.trim();
 
+//     if (historyText === ""){
+//         return;
+//     }
+//     historyArray.push(city);
+//     city.valuye =""
+
+//     storedHist();
+//     renderWeather();
+//     }
+// );
+var weatherList = $('#weather-list');
+var historyArray = [];
+// function renderWeather(){
+//     weatherList.innerHTML = "";
+//     if(!historyArray){
+//         historyArray = {
+//             searchedCity: [],
+//         }
+
+//     }else{
+//     for (let i = 0; i < historyArray.length; i++) {
+//         var history = historyArray[i];
+//         var btnHist = $("<button>")
+//         btnHist.text(history) 
+//         btnHist.attr("data-index",i)
+
+//         weatherList.append(btnHist);
+
+//     }}
+// }
+
+// function init(){
+//     var storedHist = JSON.parse(localStorage.getItem("history"));
+//     if (storedHist !== null){
+//         historyArray = storedHist;
+//     }
+//     renderWeather();
+// }
+
+
+// function storedHist(){
+//     localStorage.setItem("historyArray", JSON.stringify(historyArray));
+// }
+
+startBtn.on("click", function () {
+    dateEl.empty();
+    fiveDayEl.empty();
+    iconFiveDayEl.empty();
+    tempFiveDayEl.empty();
+    windFiveDayEl.empty();
+    humidity.empty();
+})
+
+form.on("click", function (event) {
+    event.preventDefault();
+
+
+    var city = $.trim(citySearch.val());
+    console.log(city)
+
+
+    // if (city === ""){
+    //     return;
+    // }
+
+    // historyArray.push(city.toUpperCase());
+
+
+    getWeatherData(city);
+    // storedHist();
+    // renderWeather();
+
+}
 );
 
+// weatherList.on("click", function(event){
+//     event.preventDefault();
+//     var element = event.target;
+//     if (element.matches("button") === true){
+//         var index = element.parent.attr("data-index");
+//         historyArray.splice(index, 1);
+//         storedHist();
+//         renderWeather();
+//     }
+// })
 
 function getWeatherData(city) {
     // get Current weather
     console.log(city);
     daCity.text(city.toUpperCase());
-    
+
     var cityCoor = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
     fetch(cityCoor).then(function (response) {
         if (response.ok) {
@@ -63,121 +142,81 @@ function getWeatherData(city) {
                 humidity.text("Humidity: " + humidityData + " %")
                 var weatherIcon = data.weather[0].icon;
                 iconEl.attr("src", weatherURL + weatherIcon + ".png")
-                
 
-                 
+
+
                 var cityWeatherData = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
-                
+
                 fetch(cityWeatherData).then(function (response) {
-                    if (response.ok){
+                    if (response.ok) {
                         response.json().then(function (data) {
-                           console.log(data); 
-                           
-                            
-                           for (let i = 0; i < 5; i++) {
-                            var weatherContainerEl = $(".weatherContainer");
-                            var fiveWeatherEl = $('<div>')
-                            fiveWeatherEl.addClass('col-md-2 five-weather')
-                            weatherContainerEl.append(fiveWeatherEl)
+                            console.log(data);
 
-                            var tomorrowsDate =moment().add(i +1, 'days').format('M/DD/YYYY')                            
-                            var dayDate = $('<div>')
-                            dayDate.addClass("date")
-                            dayDate.text(tomorrowsDate)
-                            fiveWeatherEl.append(dayDate)
+                            for (let i = 0; i < 5; i++) {
+                                var weatherContainerEl = $(".weatherContainer");
+                                var fiveWeatherEl = $('<div>')
+                                fiveWeatherEl.addClass('col-md-2 five-weather')
+                                weatherContainerEl.append(fiveWeatherEl)
 
-                            
-                            
-                            var tempEntry = data.list[i * 8].main.temp;
-                            var windEntry = data.list[i * 8].wind.speed;
-                            var humidityEntry = data.list[i * 8].main.humidity;
-                            var iconEntry = data.list[i * 8].weather[0].icon;
-                            
-                            console.log(tomorrowsDate)
-                            console.log(tempEntry)
-                            console.log(windEntry)
-                            console.log(humidityEntry)
-                            console.log(iconEntry + ".png")
-                            
+                                var tomorrowsDate = moment().add(i + 1, 'days').format('M/DD/YYYY')
+                                var dayDate = $('<div>')
+                                dayDate.addClass("date")
+                                dayDate.text(tomorrowsDate)
+                                fiveWeatherEl.append(dayDate)
+
+
+
+                                var tempEntry = data.list[i * 8].main.temp;
+                                var windEntry = data.list[i * 8].wind.speed;
+                                var humidityEntry = data.list[i * 8].main.humidity;
+                                var iconEntry = data.list[i * 8].weather[0].icon;
 
 
 
 
+                                var picEl = $('<img>')
+                                picEl.addClass("icon-5d")
+                                picEl.attr("src", weatherURL + iconEntry + ".png")
+
+                                var tempCard = $('<div>')
+                                tempCard.addClass("temp-5d")
+                                tempCard.text("Temp: " + tempEntry + "F")
+
+                                var windCard = $('<div>')
+                                windCard.addClass("wind-5d");
+                                windCard.text("Wind: " + windEntry + "MPH")
+
+                                var humidCard = $('<div>');
+                                humidCard.addClass("humidity-5d");
+                                humidCard.text("Humidity: " + humidityEntry + "%");
 
 
-                            var picEl = $('<img>')
-                            picEl.addClass( "icon-5d")
-                            picEl.attr("src", weatherURL + iconEntry + ".png")
 
-                            var tempCard = $('<div>')
-                            tempCard.addClass("temp-5d")
-                            tempCard.text( "Temp: " + tempEntry + "F")
-                            
-                            var windCard = $('<div>')
-                            windCard.addClass( "wind-5d");
-                            windCard.text("Wind: " + windEntry + "MPH")
-
-                            var humidCard = $('<div>');
-                            humidCard.addClass( "humidity-5d");
-                            humidCard.text( "Humidity: " + humidityEntry + "%");
-                            
-                            
-                            
-                            fiveWeatherEl.append(picEl)
-                            fiveWeatherEl.append(tempCard)
-                            fiveWeatherEl.append(windCard)
-                            fiveWeatherEl.append(humidCard)
+                                fiveWeatherEl.append(picEl)
+                                fiveWeatherEl.append(tempCard)
+                                fiveWeatherEl.append(windCard)
+                                fiveWeatherEl.append(humidCard)
 
 
 
 
-                           }
-                                
-                        //         var fiveDayDate = currentDate.getDate();
-                        //         var fiveDayMonth = currentDate.getMonth() +1;
-                        //         var fiveDayYear = currentDate.getFullYear();
-                        //         var fiveDayDate = document.createElement("div");
-                                
+                            }
 
-                        //     }
-                            // var temp0 = weatherData.list[0].main.temp;
-                            // var temp1 = weatherData.list[8].main.temp;
-                            // var temp2 = weatherData.list[16].main.temp;
-                            // var temp3 = weatherData.list[32].main.temp;
-                            // var temp4 = weatherData.list[39].main.temp;
-                            // temp1El.innerText = "Temp: "+ temp0 + "F";
-                            // temp2El.innerText = "Temp: "+ temp1 + "F";
-                            // temp3El.innerText = "Temp: "+ temp2 + "F";
-                            // temp4El.innerText = "Temp: "+ temp3 + "F";
-                            // temp5El.innerText = "Temp: "+ temp4 + "F";
 
-                            // var humidity0 = weatherData.list[0].main.humidity;
-                            // var humidity1 = weatherData.list[8].main.humidity;
-                            // var humidity2 = weatherData.list[16].main.humidity;
-                            // var humidity3 = weatherData.list[32].main.humidity;
-                            // var humidity4 = weatherData.list[39].main.humidity;
-                            
-                            // var icon0 = weatherURL+ weatherData.list[0].weather.icon +"@2x.png";
-                            // var icon1 = weatherData.list[8].weather.icon;
-                            // var icon2 = weatherData.list[16].weather.icon;
-                            // var icon3 = weatherData.list[32].weather.icon;
-                            // var icon4 = weatherData.list[39].weather.icon;
-                            
-                            
-                            // temp1El.innerText = "Temp: "+ icon0 + ".png";
-                           })    
-                    }
+                        })
+                    } 
 
-    })
-    
-            
+                })
+
+
             })
 
         }
 
     })
+
 }
 
-
+// init()
 
 
