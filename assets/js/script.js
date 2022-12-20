@@ -16,10 +16,10 @@ var windFiveDayEl = $("#wind-5d")
 var humidityDayEl = $("#humidity-5d")
 var weatherURL = "http://openweathermap.org/img/wn/"
 var form = $(".form")
-
+var fivedayForecast = $("#fiveday-forecast")
 // create Date
 let currentDate = moment().format('M/DD/YYYY')
-
+var fiveDayWeatherArray = []
 
 
 console.log(currentDate)
@@ -79,21 +79,13 @@ var historyArray = [];
 //     localStorage.setItem("historyArray", JSON.stringify(historyArray));
 // }
 
-startBtn.on("click", function () {
-    dateEl.empty();
-    fiveDayEl.empty();
-    iconFiveDayEl.empty();
-    tempFiveDayEl.empty();
-    windFiveDayEl.empty();
-    humidity.empty();
-})
 
-form.on("click", function (event) {
+
+startBtn.on("click", function (event) {
     event.preventDefault();
 
+clearField();
 
-    var city = $.trim(citySearch.val());
-    console.log(city)
 
 
     // if (city === ""){
@@ -103,10 +95,10 @@ form.on("click", function (event) {
     // historyArray.push(city.toUpperCase());
 
 
-    getWeatherData(city);
+    getWeatherData();
     // storedHist();
     // renderWeather();
-
+    form[0].reset()
 }
 );
 
@@ -121,8 +113,8 @@ form.on("click", function (event) {
 //     }
 // })
 
-function getWeatherData(city) {
-    // get Current weather
+function getWeatherData() {
+    var city = $.trim(citySearch.val());
     console.log(city);
     daCity.text(city.toUpperCase());
 
@@ -146,13 +138,15 @@ function getWeatherData(city) {
 
 
                 var cityWeatherData = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
-
+                fivedayForecast.remove(".d-none")
                 fetch(cityWeatherData).then(function (response) {
                     if (response.ok) {
                         response.json().then(function (data) {
                             console.log(data);
-
+                            
                             for (let i = 0; i < 5; i++) {
+                                
+                                
                                 var weatherContainerEl = $(".weatherContainer");
                                 var fiveWeatherEl = $('<div>')
                                 fiveWeatherEl.addClass('col-md-2 five-weather')
@@ -162,7 +156,7 @@ function getWeatherData(city) {
                                 var dayDate = $('<div>')
                                 dayDate.addClass("date")
                                 dayDate.text(tomorrowsDate)
-                                fiveWeatherEl.append(dayDate)
+                                
 
 
 
@@ -171,7 +165,7 @@ function getWeatherData(city) {
                                 var humidityEntry = data.list[i * 8].main.humidity;
                                 var iconEntry = data.list[i * 8].weather[0].icon;
 
-
+                                fiveDayWeatherArray.push(tempEntry, windEntry, humidityEntry)
 
 
                                 var picEl = $('<img>')
@@ -180,18 +174,18 @@ function getWeatherData(city) {
 
                                 var tempCard = $('<div>')
                                 tempCard.addClass("temp-5d")
-                                tempCard.text("Temp: " + tempEntry + "F")
+                                tempCard.text("Temp: " + fiveDayWeatherArray[0] + "F")
 
                                 var windCard = $('<div>')
                                 windCard.addClass("wind-5d");
-                                windCard.text("Wind: " + windEntry + "MPH")
+                                windCard.text("Wind: " + fiveDayWeatherArray[1] + "MPH")
 
                                 var humidCard = $('<div>');
                                 humidCard.addClass("humidity-5d");
-                                humidCard.text("Humidity: " + humidityEntry + "%");
+                                humidCard.text("Humidity: " + fiveDayWeatherArray[2]+ "%");
 
 
-
+                                fiveWeatherEl.append(dayDate)
                                 fiveWeatherEl.append(picEl)
                                 fiveWeatherEl.append(tempCard)
                                 fiveWeatherEl.append(windCard)
@@ -204,7 +198,7 @@ function getWeatherData(city) {
 
 
                         })
-                    } 
+                    }
 
                 })
 
@@ -214,6 +208,13 @@ function getWeatherData(city) {
         }
 
     })
+
+}
+function clearField(){
+    fiveDayWeatherArray = [];
+    $(".five-weather").remove()
+    
+
 
 }
 
