@@ -20,6 +20,8 @@ var fivedayForecast = $("#fiveday-forecast")
 var currentDate = moment().format('M/DD/YYYY')
 var weatherList = $('#weather-list');
 var fiveDayWeatherArray = []
+var historyArray = [];
+var storedHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
 
 dateEl.text(currentDate);
 
@@ -64,7 +66,7 @@ function getWeatherData() {
                             console.log(data);
 
                             for (let i = 0; i < 5; i++) {
-                                 var weatherContainerEl = $(".weatherContainer");
+                                var weatherContainerEl = $(".weatherContainer");
                                 var fiveWeatherEl = $('<div>')
                                 fiveWeatherEl.addClass('col-md-2 five-weather')
                                 weatherContainerEl.append(fiveWeatherEl)
@@ -125,25 +127,24 @@ function clearField() {
 }
 
 //add search to local storage in historyArray = [];
-var historyArray = [];
-function storeHist(){
-    
+
+function storeHist() {
+
 
     var city = citySearch.val();
-    
-    if(historyArray.includes (city.toUpperCase().trim())){
+
+    if (historyArray.includes(city.toUpperCase().trim())) {
         alert("City has already been searched")
-    }else{
+    } else {
         historyArray.push(city.toUpperCase().trim())
         getWeatherData();
         localStorage.setItem("searchHistory", JSON.stringify(historyArray));
     }
     console.log(historyArray)
 }
-    var storedHistory= JSON.parse(localStorage.getItem("searchHistory"));
-    console.log(historyArray)
 
-function init(){
+
+function init() {
     historyArray = storedHistory
     console.log(historyArray)
 }
