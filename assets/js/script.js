@@ -129,10 +129,12 @@ function clearField() {
 //add search to local storage in historyArray = [];
 
 function storeHist() {
-
-
     var city = citySearch.val();
-
+    if (city === ''){
+        alert("Please enter a city")
+        return false;
+    }
+    
     if (historyArray.includes(city.toUpperCase().trim())) {
         alert("City has already been searched")
     } else {
