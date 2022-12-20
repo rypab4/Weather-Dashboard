@@ -17,102 +17,24 @@ var humidityDayEl = $("#humidity-5d")
 var weatherURL = "http://openweathermap.org/img/wn/"
 var form = $(".form")
 var fivedayForecast = $("#fiveday-forecast")
-// create Date
-let currentDate = moment().format('M/DD/YYYY')
+var currentDate = moment().format('M/DD/YYYY')
+var weatherList = $('#weather-list');
 var fiveDayWeatherArray = []
 
-
-console.log(currentDate)
-// view date
 dateEl.text(currentDate);
-
-
-
-// startBtn.on("click", function(event) {
-//     event.preventDefault();
-//     var city = citySearch.val();
-//     console.log(city)
-//     getWeatherData(city);
-//     var historyText = city.value.trim();
-
-//     if (historyText === ""){
-//         return;
-//     }
-//     historyArray.push(city);
-//     city.valuye =""
-
-//     storedHist();
-//     renderWeather();
-//     }
-// );
-var weatherList = $('#weather-list');
-var historyArray = [];
-// function renderWeather(){
-//     weatherList.innerHTML = "";
-//     if(!historyArray){
-//         historyArray = {
-//             searchedCity: [],
-//         }
-
-//     }else{
-//     for (let i = 0; i < historyArray.length; i++) {
-//         var history = historyArray[i];
-//         var btnHist = $("<button>")
-//         btnHist.text(history) 
-//         btnHist.attr("data-index",i)
-
-//         weatherList.append(btnHist);
-
-//     }}
-// }
-
-// function init(){
-//     var storedHist = JSON.parse(localStorage.getItem("history"));
-//     if (storedHist !== null){
-//         historyArray = storedHist;
-//     }
-//     renderWeather();
-// }
-
-
-// function storedHist(){
-//     localStorage.setItem("historyArray", JSON.stringify(historyArray));
-// }
-
 
 
 startBtn.on("click", function (event) {
     event.preventDefault();
+    clearField();
+    storeHist();
 
-clearField();
+    form[0].reset();  // resets the form
 
-
-
-    // if (city === ""){
-    //     return;
-    // }
-
-    // historyArray.push(city.toUpperCase());
-
-
-    getWeatherData();
-    // storedHist();
-    // renderWeather();
-    form[0].reset()
 }
 );
 
-// weatherList.on("click", function(event){
-//     event.preventDefault();
-//     var element = event.target;
-//     if (element.matches("button") === true){
-//         var index = element.parent.attr("data-index");
-//         historyArray.splice(index, 1);
-//         storedHist();
-//         renderWeather();
-//     }
-// })
-
+//get weather data
 function getWeatherData() {
     var city = $.trim(citySearch.val());
     console.log(city);
@@ -134,20 +56,15 @@ function getWeatherData() {
                 humidity.text("Humidity: " + humidityData + " %")
                 var weatherIcon = data.weather[0].icon;
                 iconEl.attr("src", weatherURL + weatherIcon + ".png")
-
-
-
                 var cityWeatherData = "https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
                 fivedayForecast.remove(".d-none")
                 fetch(cityWeatherData).then(function (response) {
                     if (response.ok) {
                         response.json().then(function (data) {
                             console.log(data);
-                            
+
                             for (let i = 0; i < 5; i++) {
-                                
-                                
-                                var weatherContainerEl = $(".weatherContainer");
+                                 var weatherContainerEl = $(".weatherContainer");
                                 var fiveWeatherEl = $('<div>')
                                 fiveWeatherEl.addClass('col-md-2 five-weather')
                                 weatherContainerEl.append(fiveWeatherEl)
@@ -156,9 +73,6 @@ function getWeatherData() {
                                 var dayDate = $('<div>')
                                 dayDate.addClass("date")
                                 dayDate.text(tomorrowsDate)
-                                
-
-
 
                                 var tempEntry = data.list[i * 8].main.temp;
                                 var windEntry = data.list[i * 8].wind.speed;
@@ -182,8 +96,7 @@ function getWeatherData() {
 
                                 var humidCard = $('<div>');
                                 humidCard.addClass("humidity-5d");
-                                humidCard.text("Humidity: " + fiveDayWeatherArray[2]+ "%");
-
+                                humidCard.text("Humidity: " + fiveDayWeatherArray[2] + "%");
 
                                 fiveWeatherEl.append(dayDate)
                                 fiveWeatherEl.append(picEl)
@@ -191,17 +104,12 @@ function getWeatherData() {
                                 fiveWeatherEl.append(windCard)
                                 fiveWeatherEl.append(humidCard)
 
-
-
-
                             }
-
 
                         })
                     }
 
                 })
-
 
             })
 
@@ -210,14 +118,34 @@ function getWeatherData() {
     })
 
 }
-function clearField(){
+//clear all data. needed before new search
+function clearField() {
     fiveDayWeatherArray = [];
-    $(".five-weather").remove()
-    
-
-
+    $(".five-weather").remove();
 }
 
-// init()
+//add search to local storage in historyArray = [];
+var historyArray = [];
+function storeHist(){
+    
 
+    var city = citySearch.val();
+    
+    if(historyArray.includes (city.toUpperCase().trim())){
+        alert("City has already been searched")
+    }else{
+        historyArray.push(city.toUpperCase().trim())
+        getWeatherData();
+        localStorage.setItem("searchHistory", JSON.stringify(historyArray));
+    }
+    console.log(historyArray)
+}
+    var storedHistory= JSON.parse(localStorage.getItem("searchHistory"));
+    console.log(historyArray)
 
+function init(){
+    historyArray = storedHistory
+    console.log(historyArray)
+}
+
+init();
