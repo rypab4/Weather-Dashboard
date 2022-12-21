@@ -22,7 +22,7 @@ var fiveDayWeatherArray = []
 var historyArray = [];
 var storedHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
 var weatherList = $('.weather-list');
-
+var city = $.trim(citySearch.val()).toUpperCase();
 dateEl.text(currentDate);
 
 
@@ -43,7 +43,7 @@ startBtn.on("click", function (event) {
         searchedButton.addClass('searched-button')
         searchedButton.text(city.toUpperCase().trim())
         weatherList.append(searchedButton)
-        getWeatherData();
+        getWeatherData(city);
     }
     storeHist()
     form[0].reset();  // resets the form
@@ -53,10 +53,8 @@ startBtn.on("click", function (event) {
 );
 
 //get weather data
-function getWeatherData() {
-    var city = $.trim(citySearch.val());
-    console.log(city);
-    daCity.text(city.toUpperCase());
+function getWeatherData(city) {
+    daCity.text(city)
 
     var cityCoor = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
     fetch(cityCoor).then(function (response) {
@@ -182,13 +180,14 @@ function createHistbtns() {
         searchedButton.text(storedHistory[i])
         weatherList.append(searchedButton)
         var srchbtn = $('.searched-button')
+
+    }
         srchbtn.on("click", function(event){
             event.preventDefault();
-            city = event.target.innerText
-            getWeatherData();
+            var city = event.target.innerText
+            clearField()
+            getWeatherData(city);
         })
-    }
-
 
         
 }
