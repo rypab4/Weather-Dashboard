@@ -32,4 +32,4 @@ https://rypab4.github.io/Weather-Dashboard/
 
 ## GitHub Link
 
-https://github.com/matt530bailey/what-to-watch-today
+https://github.com/rypab4/Weather-Dashboard
