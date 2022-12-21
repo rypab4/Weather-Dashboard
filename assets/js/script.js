@@ -181,14 +181,17 @@ function createHistbtns() {
         searchedButton.addClass('searched-button')
         searchedButton.text(storedHistory[i])
         weatherList.append(searchedButton)
-
+        var srchbtn = $('.searched-button')
+        srchbtn.on("click", function(event){
+            event.preventDefault();
+            city = event.target.innerText
+            getWeatherData();
+        })
     }
-    var searchedBtn = $(".searched-button")
-    searchedBtn.on('click', function (e) {
-        e.preventDefault();
-        console.log(searchedBtn.val());
-    })
 
+
+        
 }
+
 
 init();
