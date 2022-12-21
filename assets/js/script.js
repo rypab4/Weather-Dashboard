@@ -85,7 +85,7 @@ function getWeatherData(city) {
                             for (let i = 0; i < 5; i++) {
                                 var weatherContainerEl = $(".weatherContainer");
                                 var fiveWeatherEl = $('<div>')
-                                fiveWeatherEl.addClass('card border-primary col-md-2 five-weather')
+                                fiveWeatherEl.addClass('card border-primary bg-info col-md-2 five-weather')
                                 fiveWeatherEl.attr('style', "width: 18rem")
                                 weatherContainerEl.append(fiveWeatherEl)
 
