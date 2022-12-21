@@ -29,18 +29,21 @@ dateEl.text(currentDate);
 startBtn.on("click", function (event) {
     event.preventDefault();
     clearField();
-    
+
     var city = $.trim(citySearch.val())
     if (storedHistory.includes(city.toUpperCase())) {
         alert("Already in weather history")
         return false;
     }
 
+    else if (city === '') {
+        "Please select or enter a city"
+    }
     else {
         historyArray.push(city.toUpperCase())
         localStorage.setItem("searchHistory", JSON.stringify(historyArray));
         searchedButton = $('<button>')
-        searchedButton.addClass('searched-button')
+        searchedButton.addClass('form-control align-item-start d-block bg-success searched-button')
         searchedButton.text(city.toUpperCase().trim())
         weatherList.append(searchedButton)
         getWeatherData(city);
@@ -54,7 +57,7 @@ startBtn.on("click", function (event) {
 
 //get weather data
 function getWeatherData(city) {
-    daCity.text(city)
+    daCity.text(city.toUpperCase().trim())
 
     var cityCoor = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=e4493ccf2e4a74ff8b3978f3fec5f980&units=imperial"
     fetch(cityCoor).then(function (response) {
@@ -82,12 +85,13 @@ function getWeatherData(city) {
                             for (let i = 0; i < 5; i++) {
                                 var weatherContainerEl = $(".weatherContainer");
                                 var fiveWeatherEl = $('<div>')
-                                fiveWeatherEl.addClass('col-md-2 five-weather')
+                                fiveWeatherEl.addClass('card border-primary col-md-2 five-weather')
+                                fiveWeatherEl.attr('style', "width: 18rem")
                                 weatherContainerEl.append(fiveWeatherEl)
 
                                 var tomorrowsDate = moment().add(i + 1, 'days').format('M/DD/YYYY')
                                 var dayDate = $('<div>')
-                                dayDate.addClass("date")
+                                dayDate.addClass("card-title date")
                                 dayDate.text(tomorrowsDate)
 
                                 var tempEntry = data.list[i * 8].main.temp;
@@ -99,19 +103,19 @@ function getWeatherData(city) {
 
 
                                 var picEl = $('<img>')
-                                picEl.addClass("icon-5d")
+                                picEl.addClass("card-img-middle icon-5d")
                                 picEl.attr("src", weatherURL + iconEntry + ".png")
-
+                                picEl.attr("alt", "weather icon")
                                 var tempCard = $('<div>')
-                                tempCard.addClass("temp-5d")
+                                tempCard.addClass("card-text temp-5d")
                                 tempCard.text("Temp: " + fiveDayWeatherArray[0] + "F")
 
                                 var windCard = $('<div>')
-                                windCard.addClass("wind-5d");
+                                windCard.addClass("card-text wind-5d");
                                 windCard.text("Wind: " + fiveDayWeatherArray[1] + "MPH")
 
                                 var humidCard = $('<div>');
-                                humidCard.addClass("humidity-5d");
+                                humidCard.addClass("card-text humidity-5d");
                                 humidCard.text("Humidity: " + fiveDayWeatherArray[2] + "%");
 
                                 fiveWeatherEl.append(dayDate)
@@ -176,20 +180,25 @@ function createHistbtns() {
         //create a button
 
         searchedButton = $('<button>')
-        searchedButton.addClass('searched-button')
+        searchedButton.addClass('form-control align-item-start d-block bg-success searched-button')
         searchedButton.text(storedHistory[i])
         weatherList.append(searchedButton)
         var srchbtn = $('.searched-button')
 
     }
-        srchbtn.on("click", function(event){
+    if (srchbtn === undefined) {
+        return false
+    }
+    else {
+        srchbtn.on("click", function (event) {
             event.preventDefault();
             var city = event.target.innerText
             clearField()
             getWeatherData(city);
         })
+    }
 
-        
+
 }
 
 
