@@ -18,10 +18,10 @@ var weatherURL = "http://openweathermap.org/img/wn/"
 var form = $(".form")
 var fivedayForecast = $("#fiveday-forecast")
 var currentDate = moment().format('M/DD/YYYY')
-var weatherList = $('#weather-list');
 var fiveDayWeatherArray = []
 var historyArray = [];
 var storedHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
+var weatherList = $('.weather-list');
 
 dateEl.text(currentDate);
 
@@ -29,11 +29,27 @@ dateEl.text(currentDate);
 startBtn.on("click", function (event) {
     event.preventDefault();
     clearField();
-    storeHist();
+    
+    var city = $.trim(citySearch.val())
+    if (storedHistory.includes(city.toUpperCase())) {
+        alert("Already in weather history")
+        return false;
+    }
 
+    else {
+        historyArray.push(city.toUpperCase())
+        localStorage.setItem("searchHistory", JSON.stringify(historyArray));
+        searchedButton = $('<button>')
+        searchedButton.addClass('searched-button')
+        searchedButton.text(city.toUpperCase().trim())
+        weatherList.append(searchedButton)
+        getWeatherData();
+    }
+    storeHist()
     form[0].reset();  // resets the form
 
 }
+
 );
 
 //get weather data
@@ -124,31 +140,55 @@ function getWeatherData() {
 function clearField() {
     fiveDayWeatherArray = [];
     $(".five-weather").remove();
+
 }
 
 //add search to local storage in historyArray = [];
 
 function storeHist() {
     var city = citySearch.val();
-    if (city === ''){
+    if (city === '') {
         alert("Please enter a city")
         return false;
     }
-    
+
     if (historyArray.includes(city.toUpperCase().trim())) {
-        alert("City has already been searched")
+        // alert("City has already been searched")
     } else {
         historyArray.push(city.toUpperCase().trim())
-        getWeatherData();
+        // getWeatherData();
         localStorage.setItem("searchHistory", JSON.stringify(historyArray));
     }
-    console.log(historyArray)
+
 }
 
 
 function init() {
-    historyArray = storedHistory
-    console.log(historyArray)
+
+    if (storedHistory !== null) {
+        historyArray = storedHistory
+
+    }
+    createHistbtns();
+}
+
+function createHistbtns() {
+
+    for (let i = 0; i < storedHistory.length; i++) {
+        //create a button
+
+        searchedButton = $('<button>')
+        searchedButton.addClass('searched-button')
+        searchedButton.text(storedHistory[i])
+        weatherList.append(searchedButton)
+
+    }
+    var searchedBtn = $(".searched-button")
+    searchedBtn.on('click', function (e) {
+        e.preventDefault();
+        console.log(searchedBtn.val());
+    })
+
 }
 
 init();
